@@ -57,23 +57,23 @@ The bot instantly detects it and posts a tracked action item card — so nothing
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│              SLACK WORKSPACE (UI Layer)               │
-│  /meeting-summary  │  /action-items  │  @mention      │
+│              SLACK WORKSPACE (UI Layer)              │
+│  /meeting-summary  │  /action-items  │  @mention     │
 └──────────────────────┬───────────────────────────────┘
                        │ Socket Mode (WebSocket)
 ┌──────────────────────▼───────────────────────────────┐
-│           BOLT FRAMEWORK (Event Processing)           │
-│  Slash Commands  │  Event Listeners  │  Web API       │
+│           BOLT FRAMEWORK (Event Processing)          |
+│  Slash Commands  │  Event Listeners  │  Web API      │
 └──────────────────────┬───────────────────────────────┘
                        │ REST API Calls
 ┌──────────────────────▼───────────────────────────────┐
-│            AI PROCESSING (Groq LLM)                   │
+│            AI PROCESSING (Groq LLM)                  │
 │  LLaMA 3.3 70B  │  Real-Time Search API              │
 └──────────────────────┬───────────────────────────────┘
                        │ Read / Write
 ┌──────────────────────▼───────────────────────────────┐
-│                 DATA LAYER                            │
-│  Channel Messages  │  User Profiles  │  Action Items   │
+│                 DATA LAYER                           │
+│  Channel Messages  │  User Profiles  │  Action Items │
 └──────────────────────────────────────────────────────┘
 ```
 
