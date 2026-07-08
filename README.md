@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Slack-Bolt%20Framework-4A154B?style=flat-square&logo=slack" alt="Slack Bolt">
   <img src="https://img.shields.io/badge/AI-Groq%20LLaMA%203.3%2070B-F97316?style=flat-square" alt="Groq AI">
-  <img src="https://img.shields.io/badge/Slack-Real%u2013Time%20Search%20API-611F69?style=flat-square" alt="Slack Search API">
+ <img src="https://img.shields.io/badge/Slack-Real%u2013Time%20Search%20API-611F69?style=flat-square" alt="Slack Search API">
   <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=node.js" alt="Node.js">
   <img src="https://img.shields.io/badge/Hackathon-Slack%20Agent%20Builder%20Challenge-blue?style=flat-square" alt="Hackathon">
 </p>
