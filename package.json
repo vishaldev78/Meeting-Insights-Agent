@@ -1,0 +1,14 @@
+{
+  "name": "meeting-insights-agent",
+  "version": "1.0.0",
+  "description": "Slack Agent Builder Challenge - Meeting Insights Agent",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^4.0.0",
+    "dotenv": "^16.0.0",
+    "openai": "^4.0.0"
+  }
+}
