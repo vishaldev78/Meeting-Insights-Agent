@@ -186,7 +186,7 @@ Meeting Insights Agent addresses a universal workplace problem:
 
 ## Author
 
-**svk8190** — Built for the [Slack Agent Builder Challenge](https://devpost.com/hackathons/slack-agent-builder-challenge)
+**svk8190** — Built for the [Slack Agent Builder Challenge](https://slackhack.devpost.com/?ref_feature=challenge&ref_medium=homepage-recommended-hackathons&_gl=1*r0lgu2*_gcl_au*MTEyODkwODM1MS4xNzc5MTcwMzY4*_ga*MTk2OTYyMDAxNi4xNzcxMzkxMzE5*_ga_0YHJK3Y10M*czE3ODM0OTM5OTgkbzcxJGcwJHQxNzgzNDkzOTk4JGo2MCRsMCRoMA..)
 
 ---
 
