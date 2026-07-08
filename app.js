@@ -1,6 +1,7 @@
 const { App } = require('@slack/bolt');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+const http = require('http');
 dotenv.config();
 
 // ===== SLACK APP INIT =====
@@ -11,7 +12,7 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN,
 });
 
-// ===== GROQ INIT (using OpenAI SDK) =====
+// ===== GROQ INIT =====
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   baseURL: 'https://api.groq.com/openai/v1',
@@ -91,22 +92,13 @@ Keep the format clean and readable.`
     await respond({
       text: summary,
       blocks: [
-        {
-          type: 'header',
-          text: { type: 'plain_text', text: '📋 Meeting Summary' }
-        },
+        { type: 'header', text: { type: 'plain_text', text: '📋 Meeting Summary' } },
         { type: 'divider' },
-        {
-          type: 'section',
-          text: { type: 'mrkdwn', text: summary }
-        },
+        { type: 'section', text: { type: 'mrkdwn', text: summary } },
         { type: 'divider' },
-        {
-          type: 'context',
-          elements: [
-            { type: 'mrkdwn', text: `✅ ${formattedMessages.length} messages analyzed | Powered by Slack AI + Groq` }
-          ]
-        }
+        { type: 'context', elements: [
+          { type: 'mrkdwn', text: `✅ ${formattedMessages.length} messages analyzed | Powered by Slack AI + Groq` }
+        ]}
       ]
     });
 
@@ -141,17 +133,8 @@ app.command('/action-items', async ({ command, ack, respond, client }) => {
     const aiResponse = await openai.chat.completions.create({
       model: AI_MODEL,
       messages: [
-        {
-          role: 'system',
-          content: `Extract action items from Slack messages. Format:
-☐ @username - task description (deadline if mentioned)
-
-Only extract genuine action items, don't speculate.`
-        },
-        {
-          role: 'user',
-          content: messageContext
-        }
+        { role: 'system', content: `Extract action items from Slack messages. Format:\n☐ @username - task description (deadline if mentioned)\n\nOnly extract genuine action items, don't speculate.` },
+        { role: 'user', content: messageContext }
       ],
       temperature: 0.2,
     });
@@ -161,22 +144,13 @@ Only extract genuine action items, don't speculate.`
     await respond({
       text: items,
       blocks: [
-        {
-          type: 'header',
-          text: { type: 'plain_text', text: '🎯 Pending Action Items' }
-        },
+        { type: 'header', text: { type: 'plain_text', text: '🎯 Pending Action Items' } },
         { type: 'divider' },
-        {
-          type: 'section',
-          text: { type: 'mrkdwn', text: items }
-        },
+        { type: 'section', text: { type: 'mrkdwn', text: items } },
         { type: 'divider' },
-        {
-          type: 'context',
-          elements: [
-            { type: 'mrkdwn', text: `🔍 Searched ${formattedMessages.length} messages` }
-          ]
-        }
+        { type: 'context', elements: [
+          { type: 'mrkdwn', text: `🔍 Searched ${formattedMessages.length} messages` }
+        ]}
       ]
     });
 
@@ -210,14 +184,8 @@ app.event('app_mention', async ({ event, say, client }) => {
     const aiResponse = await openai.chat.completions.create({
       model: AI_MODEL,
       messages: [
-        {
-          role: 'system',
-          content: `You are a Meeting Insights Agent. Answer the user's question based on Slack channel message history. Be concise and helpful.`
-        },
-        {
-          role: 'user',
-          content: `Channel history:\n${context}\n\nQuestion: ${userQuestion}`
-        }
+        { role: 'system', content: `You are a Meeting Insights Agent. Answer the user's question based on Slack channel message history. Be concise and helpful.` },
+        { role: 'user', content: `Channel history:\n${context}\n\nQuestion: ${userQuestion}` }
       ],
       temperature: 0.3,
     });
@@ -244,14 +212,8 @@ app.event('message', async ({ event, client, logger }) => {
       const check = await openai.chat.completions.create({
         model: AI_MODEL,
         messages: [
-          {
-            role: 'system',
-            content: `This is a Slack message. Check if it contains a genuine action item or commitment. Respond only in JSON format: {"is_action_item": true/false, "task": "description", "assignee": "who"}`
-          },
-          {
-            role: 'user',
-            content: event.text
-          }
+          { role: 'system', content: `This is a Slack message. Check if it contains a genuine action item or commitment. Respond only in JSON format: {"is_action_item": true/false, "task": "description", "assignee": "who"}` },
+          { role: 'user', content: event.text }
         ],
         temperature: 0.1,
       });
@@ -270,9 +232,18 @@ app.event('message', async ({ event, client, logger }) => {
   }
 });
 
+// ===== HEALTH CHECK SERVER (for Render/Heroku deployment) =====
+const PORT = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ status: 'ok', service: 'Meeting Insights Agent' }));
+});
+
 // ===== START BOT =====
 (async () => {
-  await app.start(process.env.PORT || 3000);
-  console.log('⚡ Meeting Insights Agent is RUNNING!');
-  console.log('📡 Listening for /meeting-summary, /action-items, and @mentions...');
+  await app.start(PORT);
+  server.listen(PORT, () => {
+    console.log(`⚡ Meeting Insights Agent is RUNNING on port ${PORT}!`);
+    console.log('📡 Listening for /meeting-summary, /action-items, and @mentions...');
+  });
 })();
